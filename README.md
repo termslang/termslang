@@ -31,7 +31,7 @@ TERMS contract source code consists of a single .tt file and, optionally, a .ttp
 
 Contract constructor section begins with word "Contract", optionally followed by the contract's name in double quotes. The name doesn't affect the bytecode in any way (unlike i.e. in Solidity).
 
-Contract main section consists of word Conditions followed by separator. Separators in TERMS are to divide sentences of the contract.
+Contract main section begins with word "Conditions" followed by separator. Separators in TERMS divide sentences of the contract.
 Separators are the following: dot(.), colon(:), semicolon(;). All separators are equal and have to be used according to context.
 All the following sequences are equal:
 ```
@@ -58,7 +58,7 @@ Comma(,) is not a separator and can be used in macros as a word.
 Variable is one or more words starting with capital letter or underscore symbol. The rest of letters are converted to uppercase on preprocessor stage. For instance, BALANCE and Balance are the same variable. USER BALANCE and User Balance are the same, variable, too, but one that is different from BALANCE. It is up to contract writer to decide whether to use all-uppercase variables or not.
 
 ### Ethereum environment constants
-There are some variables that are predefined by Ethereum environment. The all end with CONSTANT word, are directly compiled into EVM commands according to rules set in file terms.develop.txt:
+There are some variables that are predefined by Ethereum environment. The all end with CONSTANT word, are directly compiled into EVM commands according to rules set in file [terms.develop.txt]:
 ```
 >> CALLER CALLER
 >> REVENUE CALLVALUE
@@ -114,7 +114,8 @@ Events are declared in constructor part of the code and follow the syntax rules 
 event Transfer(address indexed _from, address indexed _to, uint256 _value);
 ```
 
-Events are called by a set of log macros. Full set of all macros can be found in terms.develop.txt
+Events are called by a set of log macros. Full set of all macros can be found in
+[terms.develop.txt](https://github.com/termslang/termslang/blob/master/terms.develop.txt)
 ```
 Log TRANSFER EVENT with topics FROM, TO, data VALUE.
 ```
@@ -141,14 +142,14 @@ There are kinds of if-else statements. For example, here is the method trim() th
 
 If-else statement can be written in one line, as far as every branch is a single sentence.
 ```
-constant trim(uint256 input)
+constant trim(uint256 input);
 If INPUT > 100, let OUTPUT = 100, else let OUTPUT = INPUT.
 Return uint256 at OUTPUT.
 ```
 
 More complex logic can be fit in the extended form of if-else statement.
 ```
-constant trim(uint256 input)
+constant trim(uint256 input);
 If INPUT > 100:
 Let OUTPUT = 100.
 Else:
@@ -159,15 +160,15 @@ Return uint256 at OUTPUT.
 
 TERMS language allows using if without else. It is processed as if else branch was empty.
 ```
-constant trim(uint256 input)
+constant trim(uint256 input);
 If INPUT <= 100, see 1.1.
 Let INPUT = 100.
 1.1. Return uint256 at INPUT.
 ```
 
-There is a special kind if-else:  if not - else. Due to decisions made in EVM, it spends less gas and produce shorter opcode than the if-else version.
+There is a special kind if-else:  if not - else. Due to decisions made in EVM, it spends less gas and produce shorter bytecode than the if-else version.
 ```
-constant trim(uint256 input)
+constant trim(uint256 input);
 If not INPUT > 100, see 1.1.
 Let INPUT = 100.
 1.1. Return uint256 at INPUT.
@@ -184,10 +185,47 @@ Procedure end.
 ```
 A procedure starts with the word procedure followed by it's name in double quotes and ends with sentence "Procedure end." One is not allowed to call a procedure from another procedure. Recursive calls are disallowed either. Those all are gas saving decisions.
 
+## Taste of the language: records, grab
+TERMS language introduces notion of "record" that is widely used in macros. Record in TERMS is a state variable sized 32 bytes. "Record string" is a sequence of state variables, 32 bytes each. Macros that operate with records, contain the word "record".
+For example, if you have variable OWNER, you can let OWNDER be equal CALLER CONSTANT.
+```
+Let OWNER = CALLER CONSTANT.
+```
+In this case, OWNER is a memory variable that contains CALLER CONSTANT (provided by EVM as CALLER opcode is copied into offset of OWNER variable). TERMS statically assigns offsets to variables as they appear in code, so if this is the first variable we see, it is assigned offset 0x20.
+
+We can write it into state variable with the same offset.
+```
+Write record OWNER.
+```
+
+Now we have both state and memory variables at offset 0x20 set to CALLER CONSTANT.
+```
+Write record OWNER.
+```
+
+Now we can change memory variable owner, let's set it to 0x00000000...
+```
+Let OWNER = 0.
+```
+
+Every time a contract is called, its every memory variable is set to 0. State variables are not like that, they are supposed to store a value. So let's imagine we want to check if CALLER CONSTANT is equal to OWNER and stop further execution if it is not. Now let's see what an owner-only method suicide() would look like.
+```
+suicide();
+Grab record OWNER.
+If not OWNER == CALLER CONSTANT, stop.
+Suicide.
+Return.
+```
+Return here is put to comply with the rule "one method - one return" of TERMS language. First, we use "grab" to copy state variable to memory variable with the same offset. Then we compare the memory variable with EVM constant that corresponds to contract caller (msg.sender, in terms of Solidity). If those addresses don't match, execution stops. Otherwise, we continue with the next sentence which destroys the contract and sends all money to the caller. If we want the method to take less space, we can write it like that:
+```
+suicide();
+Grab record OWNER. If not OWNER == CALLER CONSTANT, stop, else suicide. Return.
+```
+
 
 ## More info
 More info on current TERMS language implementation can be found in file
-[terms.develop.txt] (https://github.com/termslang/termslang/blob/master/terms.develop.txt)
+[terms.develop.txt](https://github.com/termslang/termslang/blob/master/terms.develop.txt)
 
 
 ## Contacts
