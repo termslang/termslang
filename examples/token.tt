@@ -1,0 +1,69 @@
+Contract "ERC20 token"
+
+event Transfer(address indexed _from, address indexed _to, uint256 _value);
+event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
+
+Write 1000 to record SUPPLY.
+Write 1000 to record 1 of ORIGIN CONSTANT.
+Write ORIGIN CONSTANT to record OWNER.
+
+
+Write string "Terms token" to record NAME SEQUENCE.
+Write string "TT" to record SYMBOL SEQUENCE.
+Write 18 to record DECIMALS.
+
+
+Conditions:
+
+
+Payable fallback:
+Return.
+
+
+transfer(address to, uint256 value);
+Let FROM = CALLER CONSTANT.
+Apply procedure "transfer".
+Return.
+
+
+transferFrom(address from, address to, uint256 value);
+Apply procedure "get allowance".
+if not VALUE <= REMAINING, stop.
+Decrement REMAINING by VALUE.
+Let TMP = FROM - TO.
+Write REMAINING to record at TMP.
+Apply procedure "transfer".
+Return.
+
+approve(address spender, uint256 value);
+Let TMP = CALLER CONSTANT - SPENDER.
+Write VALUE to record at TMP.
+Log APPROVAL EVENT with topics CALLER CONSTANT, SPENDER, VALUE.
+Return.
+
+
+constant balanceOf(address owner);
+Let BALANCE read record 1 of OWNER.
+Return uint256 at BALANCE.
+
+
+constant allowance(address from, address to);
+Apply procedure "get allowance".
+Return uint256 at REMAINING.
+
+constant name();
+Grab string NAME SEQUENCE.
+Return string at NAME SEQUENCE.
+
+constant symbol();
+Grab string SYMBOL SEQUENCE.
+Return string at SYMBOL SEQUENCE.
+
+constant decimals();
+Grab record DECIMALS.
+Return uint256 at DECIMALS.
+
+constant totalSupply();
+Grab record SUPPLY.
+Return uint256 at SUPPLY.

@@ -1,0 +1,52 @@
+Terms revision develop
+Contract "Bank"
+
+
+event Deposit(address indexed user, uint256 indexed sum);
+event Withdraw(address indexed user, uint256 indexed sum);
+event WithdrawFailed(address indexed user);
+
+Conditions:
+
+
+Payable fallback:
+if not REVENUE CONSTANT, stop.
+
+Find index INDEX for address CALLER CONSTANT packed in USER SEQUENCE of bytes12, address.
+Read record USER #INDEX into bytes12 BALANCE, address void.
+Increment BALANCE by REVENUE CONSTANT.
+Write packed bytes12 BALANCE, address CALLER CONSTANT to record USER #INDEX.
+Log DEPOSIT EVENT with topics CALLER CONSTANT, REVENUE CONSTANT.
+Return.
+
+
+withdraw();
+Find index INDEX of address CALLER CONSTANT packed in USER SEQUENCE of bytes12, address.
+Read record USER #INDEX into bytes12 BALANCE, address void.
+
+if not BALANCE, stop.
+
+
+Write packed bytes12 0, address CALLER CONSTANT to record USER #INDEX.
+Send BALANCE to CALLER CONSTANT or see 2.2 on failure.
+Log WITHDRAW EVENT with topics CALLER CONSTANT, BALANCE.
+Stop.
+2.2.
+Write packed bytes12 BALANCE, address CALLER CONSTANT to record USER #INDEX.
+Log WITHDRAWFAILED EVENT with topic CALLER CONSTANT.
+Return.
+
+
+constant balance();
+Find index INDEX of address CALLER CONSTANT packed in USER SEQUENCE of bytes12, address.
+Read record USER #INDEX into bytes12 BALANCE, address void.
+Return uint256 at BALANCE.
+
+
+constant users(uint256 index);
+Read record USER #INDEX into bytes12 BALANCE, address USER.
+Return address at USER.
+
+constant funds(uint256 index);
+Read record USER #INDEX into bytes12 BALANCE, address void.
+Return uint256 at BALANCE.

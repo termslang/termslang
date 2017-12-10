@@ -1,0 +1,17 @@
+
+Procedure "get allowance".
+Let TMP = FROM - TO.
+Let REMAINING read record TMP.
+Procedure end.
+
+Procedure "transfer".
+Let FROM BALANCE read record 1 of FROM.
+if not VALUE <= FROM BALANCE, stop.
+Let TO BALANCE read record 1 of TO.
+Decrement FROM BALANCE by VALUE.
+Increment TO BALANCE by VALUE.
+Write FROM BALANCE to record 1 of FROM.
+Write TO BALANCE to record 1 of TO.
+Grab record TRANSFER EVENT.
+Log TRANSFER EVENT with topics FROM, TO, data VALUE.
+Procedure end.
