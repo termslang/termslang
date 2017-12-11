@@ -18,6 +18,13 @@ For example:
 ./terms examples/token.tt
 ```
 This would compile token.tt and produce a range of output files:
+filename | purpose
+------------- |  ---
+**token.js**  |  to deploy a contract using geth, just copy and paste contains of this file into geth console
+**token.asm** |  raw assembly version of a contract. Can be useful for low-level code debugging
+**token.abi** |  contract abi
+**token.hex** |  contract bytecode
+
 
 token.js   - to deploy a contract using geth, just copy and paste contains of this file into geth console
 
@@ -264,7 +271,11 @@ More info on current TERMS language implementation can be found in file
 ## Contacts
 Feel free to contact me on matters of the TERMS language project.
 
+
 Mikhail Baynov  
+
 e-mail:      m.baynov@gmail.com
+
 twitter:     @bzz
+
 donate ETH:  0x701bc9829738a3a3feefe9e74294baa96b487d63
