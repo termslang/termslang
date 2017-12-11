@@ -1,9 +1,13 @@
 # TERMS language specification
 
 
+## Philisophy behind TERMS language
+The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English](https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
+
+
 ## Using terms compiler
 ### Compile and run terms compiler
-Terms compiler source code is written in C99 and can be compiled on Linux systems using GCC.
+Terms compiler source code is written in C99 and can be compiled on Linux systems using GCC with no dependencies.
 ```
 gcc terms.c -Wno-incompatible-pointer-types-discards-qualifiers -o terms
 ```
@@ -14,16 +18,17 @@ For example:
 ./terms examples/token.tt
 ```
 This would compile token.tt and produce a range of output files:
+
 token.js   - to deploy a contract using geth, just copy and paste contains of this file into geth console
+
 token.asm  - raw assembly version of a contract. Can be useful for low-level code debugging
+
 token.abi  - contract abi
+
 token.hex  - contract bytecode
 
+
 A project in terms language can only contain one .tt file. Optionally, it can contain .ttp file that is concatenated to the end of .tt file during compiler preprocessor stage. Normally, .ttp file is used for terms language "procedures".
-
-
-## Philisophy behind TERMS language
-The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English] (https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
 
 
 ## Contract structure
@@ -51,6 +56,7 @@ by REVENUE CONSTANT.
 ```
 
 Comma(,) is not a separator and can be used in macros as a word.
+
 The point of entry of a TERMS program is the next sentence after the "Conditions:" sentence. In contrast with Solidity, TERMS invents the concept of "fallback dispatcher". It is the piece of code that is silently inserted before the point of entry. Its purpose is to detect method signature coming with the call and dispatch the call directly to the right method. If no known method signature detected, fallback function is executed. This is how this part of the code may look like:
 ```
 Conditions:
@@ -96,6 +102,7 @@ This means that to get message caller (CALLER opcode), we need to use CALLER CON
 Variables are implicitly initialised in TERMS language. All variables are initialised with 0. That makes a shorter code but very error prone in hands of inaccurate developer with a wrong IDE. To avoid errors, we recommend using an IDE with autocomplete option and double check spelling of every variable.
 
 TERMS language is dynamically typed. The only way to know the type of a variable is to infer it.
+
 TERMS language does not use negative numbers. Most legal documents do not contain negatives, i.e. one cannot be sent -100 ether.
 
 
