@@ -18,21 +18,13 @@ For example:
 ./terms examples/token.tt
 ```
 This would compile token.tt and produce a range of output files:
-filename | purpose
-------------- |  ---
-**token.js**  |  to deploy a contract using geth, just copy and paste contains of this file into geth console
-**token.asm** |  raw assembly version of a contract. Can be useful for low-level code debugging
-**token.abi** |  contract abi
-**token.hex** |  contract bytecode
 
-
-token.js   - to deploy a contract using geth, just copy and paste contains of this file into geth console
-
-token.asm  - raw assembly version of a contract. Can be useful for low-level code debugging
-
-token.abi  - contract abi
-
-token.hex  - contract bytecode
+| filename | purpose  |
+| :---:        | :-: |
+| **token.js**  |  to deploy a contract using geth, just copy and paste contains of this file into geth console |
+| **token.asm** |  raw assembly version of a contract. Can be useful for low-level code debugging |
+| **token.abi** |  contract abi |
+| **token.hex** |  contract bytecode |
 
 
 A project in terms language can only contain one .tt file. Optionally, it can contain .ttp file that is concatenated to the end of .tt file during compiler preprocessor stage. Normally, .ttp file is used for terms language "procedures".
