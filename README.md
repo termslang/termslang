@@ -51,6 +51,15 @@ by REVENUE CONSTANT.
 ```
 
 Comma(,) is not a separator and can be used in macros as a word.
+The point of entry of a TERMS program is the next sentence after the "Conditions:" sentence. In contrast with Solidity, TERMS invents the concept of "fallback dispatcher". It is the piece of code that is silently inserted before the point of entry. Its purpose is to detect method signature coming with the call and dispatch the call directly to the right method. If no known method signature detected, fallback function is executed. This is how this part of the code may look like:
+```
+Conditions:
+Payable fallback:
+Return.
+
+transfer(address to, uint256 value);
+```
+There are plans to make the "payable fallback" section optional, but the rule is that it may only appear right after "Conditions:" sentence. There is currently no way in TERMS compiler to make a method payable unless it is the fallback method. This restriction fits most contracts. One can change abi manually to make a method payable.
 
 
 ## TERMS LANGUAGE PRIMITIVES
@@ -183,7 +192,7 @@ Let TMP = FROM - TO.
 Let REMAINING read record TMP.
 Procedure end.
 ```
-A procedure starts with the word procedure followed by it's name in double quotes and ends with sentence "Procedure end." One is not allowed to call a procedure from another procedure. Recursive calls are disallowed either. Those all are gas saving decisions.
+A procedure starts with the word procedure followed by it's name in double quotes and ends with sentence "Procedure end." One is not allowed to call a procedure from another procedure.
 
 Procedures can be used to replace Solidity modifiers. The following procedure only returns when called by contract owners.
 ```
