@@ -185,7 +185,7 @@ Procedure end.
 ```
 A procedure starts with the word procedure followed by it's name in double quotes and ends with sentence "Procedure end." One is not allowed to call a procedure from another procedure. Recursive calls are disallowed either. Those all are gas saving decisions.
 
-Procedures can be used to replace Solidity modifiers. The following procedure only returns when CALLER CONSTANT equals to OWNER
+Procedures can be used to replace Solidity modifiers. The following procedure only returns when called by contract owners.
 ```
 Procedure "owners only".
 Grab record CEO.
