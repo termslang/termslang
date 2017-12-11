@@ -23,7 +23,7 @@ A project in terms language can only contain one .tt file. Optionally, it can co
 
 
 ## Philisophy behind TERMS language
-The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English] (https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept paradigm and compiles directly into EVM instructions.
+The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English] (https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
 
 
 ## Contract structure
@@ -184,6 +184,23 @@ Let REMAINING read record TMP.
 Procedure end.
 ```
 A procedure starts with the word procedure followed by it's name in double quotes and ends with sentence "Procedure end." One is not allowed to call a procedure from another procedure. Recursive calls are disallowed either. Those all are gas saving decisions.
+
+Procedures can be used to replace Solidity modifiers. The following procedure only returns when CALLER CONSTANT equals to OWNER
+```
+Procedure "owners only".
+Grab record CEO.
+Grab record CFO.
+If not CALLER CONSTANT == CEO or CALLER CONSTANT == CFO, stop.
+Procedure end.
+```
+
+Let's say we want to only let those two to destroy the contract.
+```
+suicide();
+Apply procedure "owners only".
+Suicide.
+Return.
+```
 
 ## Taste of the language: records, grab
 TERMS language introduces notion of "record" that is widely used in macros. Record in TERMS is a state variable sized 32 bytes. "Record string" is a sequence of state variables, 32 bytes each. Macros that operate with records, contain the word "record".
