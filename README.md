@@ -9,7 +9,7 @@ The idea of TERMS language is to provide opportunity to write EVM code in a huma
 ### Compile and run terms compiler
 Terms compiler source code is written in C99 and can be compiled on Linux systems using GCC with no dependencies.
 ```
-gcc terms.c -Wno-incompatible-pointer-types-discards-qualifiers -o terms
+gcc terms.c -Wno-incompatible-pointer-types-discards-qualifiers -std=c99 -o terms
 ```
 
 Compiler executable file takes filename as argument. Terms language files are expected to have .tt extension.
