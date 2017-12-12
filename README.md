@@ -335,8 +335,8 @@ Feel free to contact me on matters of the TERMS language project.
 
 Mikhail Baynov  
 
-e-mail:      m.baynov@gmail.com
+e-mail: m.baynov@gmail.com
 
-twitter:     @bzz
+projet twitter: @termslang
 
-donate ETH:  0x701bc9829738a3a3feefe9e74294baa96b487d63
+donate ETH:  [0x701bc9829738a3a3feefe9e74294baa96b487d63](https://etherscan.io/address/0x701bc9829738a3a3feefe9e74294baa96b487d63)
