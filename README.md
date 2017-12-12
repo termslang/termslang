@@ -135,14 +135,16 @@ Events are called by a set of log macros. Full set of all macros can be found in
 Log TRANSFER EVENT with topics FROM, TO, data VALUE.
 ```
 
-## Method signatures
-Example of a method signature is:
+## Methods
+Example of a method name is:
 ```
 constant balanceOf(address owner);
 ```
-Here, variable OWNER is passed to the method. The name of the variable OWNER is inferred from balanceOf(address owner) method signature by capitalising the parameter's name. Every method has one and only one return statement
+Here, variable OWNER is passed to the method. The name of the variable OWNER is inferred from balanceOf(address owner) method name by capitalising the parameter's name.
 
-The "constant" modifier is to be applied to methods that don't change the state. It is brought from Solidity and Will likely be removed in later versions as it can be inserted programmatically on preprocessor stage.
+A method name must take exactly one line. Method body starts from the next line. Every method has one and only one return statement.
+
+NOTE: The "constant" modifier is to be applied to methods that don't change the state. It is brought from Solidity and will likely be removed in later versions.
 
 
 ## Clauses
@@ -254,9 +256,76 @@ suicide();
 Grab record OWNER. If not OWNER == CALLER CONSTANT, stop, else suicide. Return.
 ```
 
+## Macro language used in Solidity
+TERMS macros are kept in a separate file and use a special kind of EVM assembly. A macro definition starts with "## " continued by lowercase words combined in a sentence. Beside words, macros can include variable arguments like ^1, ^2 etc. Variable argument numbers start from 1 and continues by incrementing the latest number by one. Macro definitions that don't follow the rule are invalid. Here is an example of a single macro.
+```
+## see ^1
+JUMP ^1
+```
 
-## More info
-More info on current TERMS language implementation can be found in file
+TERMS macros don't don't use PUSH1, PUSH2, PUSH3 etc EVM instructions replacing them with a single instruction PUSH. There is a special kind of PUSH used in TERMS macros, PUSH* (push star). It is used to show that its operand can be contents of a variable. Let's see "## let ^1 = ^2" macro
+```
+## let ^1 = ^2
+PUSH* ^2
+PUSH ^1
+MSTORE
+```
+
+```
+Let NUMBER = 200.
+```
+Here we provide arguments: ^1 is a variable NUMBER with offset 0x20, ^2 is integer 200 that is translated to hex 0xC8. Here is the assembly output:
+```
+PUSH 0xC8
+PUSH 0x20
+MSTORE
+```
+
+Now we want to have a copy of NUMBER variable in another variable, NUMBER COPY.
+```
+Let NUMBER COPY = NUMBER.
+```
+Now ^1 is a variable NUMBER COPY with offset 0x40, ^2 the old variable NUMBER. The assembly output now is different:
+```
+PUSH 0x20
+MLOAD
+PUSH 0x40
+MSTORE
+```
+It is different because this time we have to use MLOAD instruction to access contents of NUMBER variable.
+
+Macros are allowed to use internal jumps and loops which allows an advanced class of macros. A good example of that kind of macros is a macro to copy a string from the contract state into memory. It would loop until SLOAD returns zero.
+```
+## grab string ^1
+PUSH ^1
+JUMPDEST loop
+DUP1
+DUP1
+SLOAD
+SWAP1
+MSTORE
+PUSH 0x20
+ADD
+DUP1
+SLOAD
+JUMPI loop
+```
+
+TERMS macro assembly language uses a special instruction set.
+| instruction      | purpose  |
+| :---:            | - |
+| **INIT**         |  signifies end of contract constructor section and provides fallback dispatcher |
+| **FALLBACK**     |  declares beginning of fallback section |
+| **CONDITIONNOT** |  if-else condition, goes first, optional; executed when stack is 0 |
+| **CONDITIONYES** |  if-else condition, goes next, optional; executed when stack is not 0 |
+| **CONDITIONEND** |  if-else condition, ends the condition, requires CONDITIONNOT, CONDITIONYES or both |
+| **REFJUMP**      |  saves backjump offset to memory offset 0x00, jumps to the procedure |
+| **BACKJUMP**     |  jumps back to previously saved memory offset |
+| **MSTORESEQ**    |  stores provided byte sequence in memory starting with PUSH address provided above |
+| **SSTORESEQ**    |  stores provided byte sequence in state  starting with PUSH address provided above |
+Those instructions are deeply baked into TERMS internal assembly language and should be used with care. In particular, gas costs for MSTORESEQ and SSTORESEQ is undefined. Use third party disassemblers to see why.
+
+More info on current TERMS language implementation macros can be found in file
 [terms.develop.txt](https://github.com/termslang/termslang/blob/master/terms.develop.txt)
 
 

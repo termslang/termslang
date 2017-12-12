@@ -36,7 +36,8 @@ FALLBACK ()
 REVERT
 
 ## write ^1 to record ^2
-PUSH* ^1
+PUSH ^1
+MLOAD
 PUSH ^2
 SSTORE
 
@@ -46,7 +47,8 @@ PUSH* ^2
 SSTORE
 
 ## write record ^1
-PUSH* ^1
+PUSH ^1
+MLOAD
 PUSH ^1
 SSTORE
 
