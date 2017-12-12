@@ -2,7 +2,7 @@
 
 
 ## Philisophy behind [#termslang](https://twitter.com/hashtag/termslang)
-The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English](https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
+The idea of TERMS language is to provide opportunity to write EVM code in a human readable language, subset of [legal English](https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
 
 
 ## Using terms compiler
@@ -143,6 +143,12 @@ constant balanceOf(address owner);
 Here, variable OWNER is passed to the method. The name of the variable OWNER is inferred from balanceOf(address owner) method name by capitalising the parameter's name.
 
 A method name must take exactly one line. Method body starts from the next line. Every method has one and only one return statement.
+
+This is what identity method would look like:
+```
+constant identity(uint256 input);
+Return unit256 at INPUT.
+```
 
 NOTE: The "constant" modifier is to be applied to methods that don't change the state. It is brought from Solidity and will likely be removed in later versions.
 
