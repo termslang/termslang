@@ -1,7 +1,7 @@
 # TERMS language specification
 
 
-## Philisophy behind TERMS language
+## Philisophy behind # #termslang
 The idea of TERMS language is to provide possibility to write EVM code in a human readable language, subset of [legal English](https://en.wikipedia.org/wiki/Legal_English). It does not try to follow a particular programming concept or paradigm and compiles directly into EVM instructions.
 
 
