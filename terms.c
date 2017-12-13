@@ -18,7 +18,10 @@ gcc terms.c -Wno-incompatible-pointer-types-discards-qualifiers -o terms
 #include <stdio.h>
 #include <stdbool.h>
 #include <dirent.h>
+
 typedef unsigned char uint8_t;
+#define _GNU_SOURCE
+
 #include "emasm.c"
 
 
