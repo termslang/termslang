@@ -55,7 +55,8 @@ int is_hex(const char* str) {
   if (str[1] != 'x' && str[1] != 'X') {
      return 0;
   }
-  for (size_t i = 2; i < strlen(str); ++i) {
+  size_t i;
+  for (i = 2; i < strlen(str); ++i) {
      char current = str[i];
      if ((current >= '0' && current <= '9') ||
          (current >= 'A' && current <= 'F') ||
@@ -81,7 +82,8 @@ char byte_from_hexchar(const char in) {
 void hex2bin(const char *in, uint8_t** out, size_t* out_len) {
   if (!in) return;
   *out = (uint8_t*)malloc(strlen(in) / 2);
-  for (size_t i = 0; i < strlen(in) / 2; ++i) {
+  size_t i;
+  for (i = 0; i < strlen(in) / 2; ++i) {
      const char hi = byte_from_hexchar(in[i * 2]);
      const char lo = byte_from_hexchar(in[i * 2 + 1]);
      (*out)[i] = hi * 16 + lo;

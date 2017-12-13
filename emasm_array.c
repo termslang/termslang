@@ -13,7 +13,8 @@ int toupper(int c) {
 size_t string_index_in_arr(const char *str, const char **arr) {  //CASE INSENSITIVE
   if (!str) return -1;
 	if (!arr) return -1;
-  for (size_t i=0; arr[i]; ++i) {
+	size_t i;
+  for (i=0; arr[i]; ++i) {
     if (!strcasecmp(str, arr[i])) return i;
   }
   return -1;
@@ -32,14 +33,16 @@ int arr_comp(const char **arr1, const char **arr2) {
   if (!arr2) return 0;
   size_t len = arr_count(arr1);
   if (len != arr_count(arr2)) return 0;
-  for (size_t i=0; i < len; ++i) {
+  size_t i;
+	for (i=0; i < len; ++i) {
     if (strcmp(arr1[i], arr2[i])) return 0;
   }
   return 1;
 }
 
 int arr_exists_in_arr(const char **arr, const char ***arr_arr) {
-  for (size_t ii=0; arr_arr[ii]; ++ii) {
+  size_t ii;
+	for (ii=0; arr_arr[ii]; ++ii) {
     if (arr_comp(arr_arr[ii], arr)) return 1;
   }
   return 0;

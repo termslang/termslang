@@ -48,8 +48,10 @@ char* terms_abi_preprocessor(char ****sentences_arr, char ***event_strings_arr) 
   };
   struct function *functions = NEW_ARR;
   size_t functions_count = 0;
-  for (size_t ii=0; *(*sentences_arr + ii); ++ii) {
-    for (size_t i=0; *(*(*sentences_arr + ii) + i); ++i) {
+  size_t ii;
+  size_t i;
+  for (ii=0; *(*sentences_arr + ii); ++ii) {
+    for (i=0; *(*(*sentences_arr + ii) + i); ++i) {
       struct function f = {0};
       if (string_is_method_name(*(*(*sentences_arr + ii) + i))) {
         // printf("%s\n", *(*(*sentences_arr + ii) + i));
@@ -87,7 +89,7 @@ char* terms_abi_preprocessor(char ****sentences_arr, char ***event_strings_arr) 
   char *text_p = text;
   text_p[0] = '[';
   ++text_p;
-  for (size_t ii=0; functions[ii].name[0]; ++ii) {
+  for (ii=0; functions[ii].name[0]; ++ii) {
     if (ii>0) {
       text_p[0] = ',';
       ++text_p;
@@ -103,7 +105,8 @@ char* terms_abi_preprocessor(char ****sentences_arr, char ***event_strings_arr) 
     text_p += strlen(text_p);
     strcpy(text_p, ",\"inputs\":[");
     text_p += strlen(text_p);
-    for (size_t i=0; f.input_types[i]; ++i) {
+    size_t i;
+    for (i=0; f.input_types[i]; ++i) {
       if (f.input_types[i][0]) {
         if (i>0) {
           text_p[0] = ',';
@@ -127,7 +130,7 @@ char* terms_abi_preprocessor(char ****sentences_arr, char ***event_strings_arr) 
   text_p += strlen(text_p);
 
 
-  size_t ii=0;
+  ii=0;
   while (*(*event_strings_arr + ii)) {
     char *event_str = *(*event_strings_arr + ii);
 
@@ -147,7 +150,7 @@ char* terms_abi_preprocessor(char ****sentences_arr, char ***event_strings_arr) 
     // print_arr("type_args", type_args);
     // printf("%s\n", event_name);
     // printf("hash %s\n", keccak_hash(signature));
-    // for (size_t i = 0; event_indexed1_unindexed2_arr[i]; i++) {
+    // for (i = 0; event_indexed1_unindexed2_arr[i]; i++) {
     //   printf("<<<< %zu\n", event_indexed1_unindexed2_arr[i]);
     // }
     // getchar();

@@ -80,7 +80,8 @@ int callname_exists(const char *str) {
 
 
 char* func_at_offset(size_t offset, const struct tag *func_arr) {
-  for (size_t i = 1; func_arr[i].name[0] != 0; ++i) {
+  size_t i;
+  for (i = 1; func_arr[i].name[0] != 0; ++i) {
     if (func_arr[i].offset == offset) {
       return (char*)func_arr[i].name;
     }
@@ -256,7 +257,7 @@ char* emasm_disasm(const char* in) {
   // Replacements
 
   init_part = true;
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
     // replace init
     if (i+8 < line_count) {
       if ( comp(instructions[i], "PUSH")
@@ -343,7 +344,7 @@ char* emasm_disasm(const char* in) {
   char **end_tags = NEW_BIG_ARR;
   char **yes_tags = NEW_BIG_ARR;
   size_t jumpi_tags_count = 0;
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
     if (!instructions[i]) continue;
     if (!strcmp(instructions[i], "JUMPI")) {
       if (-1 == string_index_in_arr(operands[i], jumpi_tags)) {
@@ -370,7 +371,7 @@ char* emasm_disasm(const char* in) {
   print_arr("end_tags", end_tags);
 
 
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
     if (!instructions[i]) continue;
     if (!strcmp(instructions[i], "JUMPI")) {
       size_t n=i+1;
@@ -406,7 +407,8 @@ char* emasm_disasm(const char* in) {
         char *replace_with_tag = operands[i];
         // FREE(jumpi_tags[m_index]);
         // jumpi_tags[m_index] = strdup(operands[i]);
-        for (size_t ii = 0; ii < line_count; ++ii) {
+        size_t ii;
+        for (ii = 0; ii < line_count; ++ii) {
           if (!instructions[ii]) break;
           if (!memcmp(instructions[ii], "JUMP", 4) && !strcmp(operands[ii], tag_to_replace)) {
             FREE(operands[ii]);
@@ -418,7 +420,7 @@ char* emasm_disasm(const char* in) {
     }
   }
 
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
     if (!instructions[i]) continue;
     if (!strcmp(instructions[i], "JUMPI")) {
       FREE(instructions[i]);
@@ -432,7 +434,7 @@ char* emasm_disasm(const char* in) {
     }
   }
 
-  // for (size_t i = 0; i < line_count; ++i) {
+  // for (i = 0; i < line_count; ++i) {
   //   if (instructions[i]) {
   //     printf("%s", instructions[i]);
   //     if (operands[i]) {
@@ -443,14 +445,14 @@ char* emasm_disasm(const char* in) {
   //
   // getchar();
   //
-  // for (size_t i = 1; i < func_count; ++i) {
+  // for (i = 1; i < func_count; ++i) {
   //   printf("func_count[%zu] %s %04x\n", i, func_arr[i].name, func_arr[i].offset);
   // }
 
 
 
   // Save to out
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
    if (!instructions[i]) continue;
     if (comp(instructions[i], "INIT") ||
         comp(instructions[i], "FALLBACK") ||
@@ -474,7 +476,7 @@ char* emasm_disasm(const char* in) {
 
   FREE(instr);
   FREE(operand);
-  for (size_t i = 0; i < line_count; ++i) {
+  for (i = 0; i < line_count; ++i) {
     FREE(instructions[i]);
     FREE(operands[i]);
   }

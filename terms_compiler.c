@@ -152,7 +152,8 @@ void parse_matches_final_arr(const char** constants, const char** constants_bodi
   size_t variable_arrays_count = 1;
 
   char *var_name_str;
-  for (size_t ii=0; *(*matches_final_arr + ii); ++ii) {
+  size_t ii;
+  for (ii=0; *(*matches_final_arr + ii); ++ii) {
     char **sentence_arr = NEW_ARR;
     char **macro_sentence_arr = NEW_ARR;
 
@@ -309,7 +310,7 @@ void parse_matches_final_arr(const char** constants, const char** constants_bodi
   }  //for ii
   REALLOC_ARR(variables);
   REALLOC_ARR(variable_arrays_arr);
-  for (size_t ii=0; *(*matches_final_arr + ii); ++ii) {
+  for (ii=0; *(*matches_final_arr + ii); ++ii) {
     char **arr = *(*matches_final_arr + ii);
     update_match_lines(ii, constants, constants_bodies, &variables, &variable_arrays_arr, &arr);
   }
@@ -346,7 +347,7 @@ char* terms_compile(const char *source_filename, FILE *file, char ***errors_arr)
     fclose(file_ttp);
   }
   FREE(filename_ttp);
-  
+
 
   FREE(l);
 
@@ -786,7 +787,7 @@ print("TEXT:\n%s\n", text);
   FREE(case_depth);
 
 
-  // for (size_t ii = 0; ii < sentences_count; ++ii) {
+  // for (ii = 0; ii < sentences_count; ++ii) {
   //   print_arr("SENTENCES", sentences_arr[ii]);
   // }
   // getchar();
@@ -838,7 +839,7 @@ print("TEXT:\n%s\n", text);
   char ***matches_final_arr = NEW_BIG_ARR;
   size_t matches_count = 0;
   size_t errors_count = 0;
-  for (size_t ii = 0; sentences_arr[ii]; ++ii) {
+  for (ii = 0; sentences_arr[ii]; ++ii) {
     char **match = NEW_ARR;
     match[0] = NEW_LINE;
     match[1] = NEW_LINE;
@@ -878,10 +879,10 @@ print("TEXT:\n%s\n", text);
   matches_final_arr[matches_count] = 0;
 
 
-  // for (size_t ii = 0; ii < sentences_count; ++ii) {
+  // for (ii = 0; ii < sentences_count; ++ii) {
   //   print_arr("SENTENCES", sentences_arr[ii]);
   // }
-  for (size_t ii=0; sentences_arr[ii]; ++ii) {
+  for (ii=0; sentences_arr[ii]; ++ii) {
     FREE_ARR(sentences_arr[ii]);
   }
   REALLOC_STRPTR_ARR(sentences_arr);
@@ -889,37 +890,37 @@ print("TEXT:\n%s\n", text);
 
 
 
-  // for (size_t ii = 0; matches_final_arr[ii][0]; ++ii) {
+  // for (ii = 0; matches_final_arr[ii][0]; ++ii) {
   //   print_arr("matches_final_arr", matches_final_arr[ii]);
   // }
   // getchar();
 
   parse_matches_final_arr(constants, constants_bodies, &matches_final_arr);
 
-  // for (size_t ii=0; macros_head_arr[ii]; ++ii) {
+  // for (ii=0; macros_head_arr[ii]; ++ii) {
   //   FREE_ARR(macros_head_arr[ii]);
   // }
   // FREE(macros_head_arr);
 
-  for (size_t ii=0; macros_body_arr[ii]; ++ii) {
+  for (ii=0; macros_body_arr[ii]; ++ii) {
     FREE_ARR(macros_body_arr[ii]);
   }
   FREE(macros_body_arr);
 
   // printf("---------------------------------\n");
-  // for (size_t ii = 0; macros_body_arr[ii] != 0; ++ii) {
+  // for (ii = 0; macros_body_arr[ii] != 0; ++ii) {
   //   printf("BODIES[%zu]\n", ii);
   //   print_arr("BODY", macros_body_arr[ii]);
   // }
-  // for (size_t ii = 0; macros_instr_arr[ii] != 0; ++ii) {
+  // for (ii = 0; macros_instr_arr[ii] != 0; ++ii) {
   //   printf("INSTR[%zu]\n", ii);
   //   print_arr("INSTR", macros_instr_arr[ii]);
   // }
-  // for (size_t ii = 0; macros_operand_zarr[ii] != 0; ++ii) {
+  // for (ii = 0; macros_operand_zarr[ii] != 0; ++ii) {
   //   printf("OPERAND[%zu]\n", ii);
   //   print_arr("INSTR", macros_operand_zarr[ii]);
   // }
-  // for (size_t ii = 0; matches_final_arr[ii] != 0; ++ii) {
+  // for (ii = 0; matches_final_arr[ii] != 0; ++ii) {
   //   printf("MATCHES[%zu]\n", ii);
   //   print_arr("MATCH", matches_final_arr[ii]);
   // }
@@ -928,7 +929,7 @@ print("TEXT:\n%s\n", text);
 
   char *out = NEW_BIG_ARR;
   char *out_p = out;
-  for (size_t ii = 0; matches_final_arr[ii] != 0; ++ii) {
+  for (ii = 0; matches_final_arr[ii] != 0; ++ii) {
     for (size_t y = 0; matches_final_arr[ii][y] != 0; ++y) {
       strcpy(out_p, matches_final_arr[ii][y]);
       out_p += strlen(matches_final_arr[ii][y]);

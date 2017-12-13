@@ -306,7 +306,8 @@ char* keccak_hash(const char* in) {
 	uint8_t *hash;
 	hash = sha3_Finalize(&c);
 
-  for (size_t i = 0; i < 32; ++i) {
+  size_t i;
+  for (i = 0; i < 32; ++i) {
     sprintf(out_p, "%02x", hash[i]);
     out_p += 2;
   }

@@ -9,7 +9,8 @@ size_t parse_push_bytes(const char *operand, char **hex_bytes) {
   if (!*hex_bytes) *hex_bytes = NEW_ARR;
   if (!memcmp(operand, "HASH:", 5)) {
     char *body = operand + 5;
-    for (size_t i = 0; i < strlen(body); ++i) {
+    size_t i;
+    for (i = 0; i < strlen(body); ++i) {
       if (body[i] == ' ' || body[i] == '\t') {
         body[i] = 0;
       }
@@ -47,7 +48,8 @@ size_t parse_push_bytes(const char *operand, char **hex_bytes) {
 }
 
 size_t string_index_in_tag_arr(const char *str, const struct tag *tags_arr) {
-  for (size_t i = 1; tags_arr[i].name[0]; ++i) {
+  size_t i;
+  for (i = 1; tags_arr[i].name[0]; ++i) {
     if (!strcmp(str, tags_arr[i].name)) {
       return i;
     }
@@ -67,13 +69,14 @@ size_t string_index_in_tag_arr(const char *str, const struct tag *tags_arr) {
 char* add_loader(char***init_seq_arr, char*** seq_arr) {
   char *init_wr = NEW_ARR;
   char *wr_p = init_wr;
-  for (size_t i = 1; *(*init_seq_arr + i); ++i) {
+  size_t i;
+  for (i = 1; *(*init_seq_arr + i); ++i) {
     strcpy(wr_p, *(*init_seq_arr + i));
     wr_p += strlen(*(*init_seq_arr + i));
   }
   char *wr = NEW_ARR;
   wr_p = wr;
-  for (size_t i = 1; *(*seq_arr + i); ++i) {
+  for (i = 1; *(*seq_arr + i); ++i) {
     strcpy(wr_p, *(*seq_arr + i));
     wr_p += strlen(*(*seq_arr + i));
   }
@@ -94,7 +97,7 @@ char* add_loader(char***init_seq_arr, char*** seq_arr) {
   REALLOC_STR(str2);
   **seq_arr = str2;
   wr_p = wr;
-  for (size_t i = 0; *(*seq_arr + i) != 0; ++i) {
+  for (i = 0; *(*seq_arr + i) != 0; ++i) {
     strcpy(wr_p, *(*seq_arr + i));
     wr_p += strlen(*(*seq_arr + i));
   }
@@ -105,7 +108,8 @@ char* add_loader(char***init_seq_arr, char*** seq_arr) {
 void update_tags_offset(const char **seq_arr, struct tag **tags_arr) {
   size_t len = 0;
   size_t tags_c = 1;
-  for (size_t i = 1; seq_arr[i]; ++i) {
+  size_t i;
+  for (i = 1; seq_arr[i]; ++i) {
     len += strlen(seq_arr[i])/2;
     if (strlen(seq_arr[i]) > 2) continue;
     uint8_t* bytes = malloc(1);
@@ -121,7 +125,8 @@ void update_tags_offset(const char **seq_arr, struct tag **tags_arr) {
 int test_jumpdest(const char **seq_arr, const struct tag *tags_arr) {   //0 = success
   size_t t = 1;
   size_t len = 0;
-  for (size_t i = 1; seq_arr[i]; ++i) {
+  size_t i;
+  for (i = 1; seq_arr[i]; ++i) {
     len += strlen(seq_arr[i])/2;
     uint8_t* bytes = malloc(1);
     hex2bin(seq_arr[i], &bytes, NULL);
@@ -140,7 +145,7 @@ int test_jumpdest(const char **seq_arr, const struct tag *tags_arr) {   //0 = su
 
   // test JUMPREF
   size_t refjump_tag_no = 0;
-  for (size_t i = 1; seq_arr[i]; ++i) {
+  for (i = 1; seq_arr[i]; ++i) {
     if (string_ends_with(seq_arr[i], "600052")
     && ((string_ends_with(seq_arr[i+1], "56") || string_ends_with(seq_arr[i+1], "57")))
     && !strcmp(seq_arr[i+2], "5b")) {
@@ -175,7 +180,8 @@ int test_jumpdest(const char **seq_arr, const struct tag *tags_arr) {   //0 = su
 
 void write_jumps_seq(const struct tag *tags_arr, const size_t *jumps_arr, char*** seq_arr) {
   size_t jumps = 0;
-  for (size_t i = 1; *(*seq_arr + i); ++i) {
+  size_t i;
+  for (i = 1; *(*seq_arr + i); ++i) {
     char *str = *(*seq_arr + i);
 
     // JUMP JUMPI
@@ -202,7 +208,7 @@ void write_jumps_seq(const struct tag *tags_arr, const size_t *jumps_arr, char**
 
   // JUMPREF
   size_t refjump_tag_no = 0;
-  for (size_t i = 1; *(*seq_arr + i); ++i) {
+  for (i = 1; *(*seq_arr + i); ++i) {
     if (string_ends_with(*(*seq_arr + i), "600052")) {
 
       ++refjump_tag_no;
@@ -222,7 +228,7 @@ void write_jumps_seq(const struct tag *tags_arr, const size_t *jumps_arr, char**
 
       // printf("\n\n******************************LOG:");
       // printf("\nseq_arr:\n");
-      // for (size_t i = 1; *(*seq_arr + i) != 0; ++i) {
+      // for (i = 1; *(*seq_arr + i) != 0; ++i) {
       //   printf("[%02zu] %s\n", i, *(*seq_arr + i));}
       // printf("*******************************END\n\n");
     }
@@ -658,7 +664,8 @@ print_arr("lines", lines_arr);
     }
     if (!strcmp(instr, "FALLBACK")) {
       //form func_arr
-      for (size_t i = 1; tags_arr[i].name[0]; ++i) {
+      size_t i;
+      for (i = 1; tags_arr[i].name[0]; ++i) {
         if (string_is_function_name(tags_arr[i].name)) {
           strcpy(func_arr[func_count].name, tags_arr[i].name);
           ++func_count;
@@ -673,7 +680,7 @@ print_arr("lines", lines_arr);
       strcpy(fallback_operand, operand);
       sprintf(wr_p, "60e060020a60003504");
       wr_p += 18;
-      for (size_t i = 1; i < func_count; ++i) {
+      for (i = 1; i < func_count; ++i) {
         char hash[65];
         if (!memcmp(func_arr[i].name, "UNKNOWN_FUNC(", 13)) {
           memcpy(hash, func_arr[i].name+13, 8);
@@ -808,19 +815,19 @@ print_arr("lines", lines_arr);
 
   // printf("\n\n******************************LOG:");
   // printf("\ninit_seq_arr:\n");
-  // for (size_t i = 1; *(init_seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(init_seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_seq_arr[i]);}
   // printf("\nseq_arr:\n");
-  // for (size_t i = 1; *(seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, seq_arr[i]);}
   // printf("\ninit_tags_arr:\n");
-  // for (size_t i = 1; *(init_tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(init_tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_tags_arr[i].name);}
   // printf("\ntags_arr:\n");
-  // for (size_t i = 1; *(tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, tags_arr[i].name);}
   // printf("\njumps_arr:\n");
-  // for (size_t i = 0; jumps_arr[i] != 0; ++i) {
+  // for (i = 0; jumps_arr[i] != 0; ++i) {
   //   printf("[%zu] = %zu\n", i, jumps_arr[i]);}
   // printf("*******************************END\n\n");
 
@@ -830,17 +837,18 @@ print_arr("lines", lines_arr);
     //insert fallback dispatcher functions to jumps_arr + jumps_before_fallback
     size_t *old_jumps_arr = jumps_arr;
     jumps_arr = NEW_ARR;
-    for (size_t i = 0; i < jumps_before_fallback; ++i) {
+    size_t i;
+    for (i = 0; i < jumps_before_fallback; ++i) {
       jumps_arr[i] = old_jumps_arr[i];
     }
     size_t y = 0;
-    for (size_t i = 1; i < func_count; ++i) {
+    for (i = 1; i < func_count; ++i) {
       jumps_arr[y + jumps_before_fallback] = string_index_in_tag_arr(func_arr[i].name, tags_arr);
       ++y;
       ++jumps_arr_count;
     }
     jumps_arr[y + jumps_before_fallback] = 0;
-    for (size_t i = jumps_before_fallback; jumps_arr[i]; ++i) {
+    for (i = jumps_before_fallback; jumps_arr[i]; ++i) {
       jumps_arr[i+y] = old_jumps_arr[i];
     }
   }
@@ -849,19 +857,19 @@ print_arr("lines", lines_arr);
 
   // printf("\n\n******************************LOG:");
   // printf("\ninit_seq_arr:\n");
-  // for (size_t i = 1; *(init_seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(init_seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_seq_arr[i]);}
   // printf("\nseq_arr:\n");
-  // for (size_t i = 1; *(seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, seq_arr[i]);}
   // printf("\ninit_tags_arr:\n");
-  // for (size_t i = 1; *(init_tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(init_tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_tags_arr[i].name);}
   // printf("\ntags_arr:\n");
-  // for (size_t i = 1; *(tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, tags_arr[i].name);}
   // printf("\njumps_arr:\n");
-  // for (size_t i = 0; jumps_arr[i] != 0; ++i) {
+  // for (i = 0; jumps_arr[i] != 0; ++i) {
   //   printf("[%zu] = %zu\n", i, jumps_arr[i]);}
   // printf("*******************************END\n\n");
   //
@@ -875,19 +883,19 @@ print_arr("lines", lines_arr);
 
   // printf("\n\n******************************LOG:");
   // printf("\ninit_seq_arr:\n");
-  // for (size_t i = 1; *(init_seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(init_seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_seq_arr[i]);}
   // printf("\nseq_arr:\n");
-  // for (size_t i = 1; *(seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, seq_arr[i]);}
   // printf("\ninit_tags_arr:\n");
-  // for (size_t i = 1; *(init_tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(init_tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_tags_arr[i].name);}
   // printf("\ntags_arr:\n");
-  // for (size_t i = 1; *(tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, tags_arr[i].name);}
   // printf("\njumps_arr:\n");
-  // for (size_t i = 0; jumps_arr[i] != 0; ++i) {
+  // for (i = 0; jumps_arr[i] != 0; ++i) {
   //   printf("[%zu] = %zu\n", i, jumps_arr[i]);}
   // printf("*******************************END\n\n");
   //
@@ -900,19 +908,19 @@ print_arr("lines", lines_arr);
 
   // printf("\n\n******************************LOG:");
   // printf("\ninit_seq_arr:\n");
-  // for (size_t i = 1; *(init_seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(init_seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_seq_arr[i]);}
   // printf("\nseq_arr:\n");
-  // for (size_t i = 1; *(seq_arr + i) != 0; ++i) {
+  // for (i = 1; *(seq_arr + i) != 0; ++i) {
   //   printf("[%02zu] %s\n", i, seq_arr[i]);}
   // printf("\ninit_tags_arr:\n");
-  // for (size_t i = 1; *(init_tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(init_tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] %s\n", i, init_tags_arr[i].name);}
   // printf("\ntags_arr:\n");
-  // for (size_t i = 1; *(tags_arr + i)->name != 0; ++i) {
+  // for (i = 1; *(tags_arr + i)->name != 0; ++i) {
   //   printf("[%02zu] 0x%04lx   %s\n", i, tags_arr[i].offset, tags_arr[i].name);}
   // printf("\njumps_arr:\n");
-  // for (size_t i = 0; jumps_arr[i] != 0; ++i) {
+  // for (i = 0; jumps_arr[i] != 0; ++i) {
   //   printf("[%zu] = %zu\n", i, jumps_arr[i]);}
   // printf("*******************************END\n\n");
 
