@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+typedef unsigned char uint8_t;
+
+
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))

@@ -11,7 +11,7 @@ Terms compiler source code is written in C99 and can be compiled on Linux system
 ```
 gcc terms.c -Wno-incompatible-pointer-types-discards-qualifiers -o terms
 ```
-WARNING: The source code successfully compiles under Mac OS. It is not tested on Linux. Everyone are welcome to contribute to make it work on various Linux distributions
+WARNING: The source code successfully compiles under Mac OS. It is not tested on Linux. You can contribute to make it work on various Linux distributions
 
 Compiler executable file takes filename as argument. Terms language files are expected to have .tt extension.
 For example:
